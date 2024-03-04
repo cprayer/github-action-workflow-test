@@ -1,0 +1,24 @@
+name: "Auto Labeler"
+on:
+  pull_request:
+  workflow_run:
+    types:
+      - completed
+    workflows:
+      - "autoupdate"
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Labeler
+        uses: actions/labeler@v4
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/label-pr.yaml
+          sync-labels: true
